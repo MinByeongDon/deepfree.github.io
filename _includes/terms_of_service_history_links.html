@@ -1,22 +1,33 @@
+<!-- 이 파일은 Enter의 위치가 매우 중요함. Save without formatting !!!!!! -->
 {% assign terms_title = page.terms_title | default: page.title %}
 {% assign current_date = page.effective_date | date: '%Y-%m-%d' %}
 {% assign history = site.data.terms_of_service_history | sort: 'date' %}
 {% assign has_previous_versions = false %}
 
 {% for version in history %}
-{% assign version_date = version.date | date: '%Y-%m-%d' %}
-{% if version_date < current_date and version.link %} {% assign has_previous_versions=true %} {% break %} {% endif %} {% endfor %} {% if has_previous_versions %} <section class="terms-history">
-    <h2>이전 버전</h2>
-    <ul>
-        {% for version in history %}
-        {% assign version_date = version.date | date: '%Y-%m-%d' %}
-        {% assign next_index = forloop.index0 | plus: 1 %}
-        {% assign next_version = history[next_index] %}
-        {% if version_date < current_date and version.link and next_version %} {% assign end_timestamp=next_version.date | date: '%s' | minus: 86400 %} {% assign end_date=end_timestamp | date: '%Y-%m-%d' %} <li>
-            <a href="{{ version.link | relative_url }}">변경 전 {{ terms_title }} ({{ version_date }}~{{ end_date }})</a>
-            </li>
-            {% endif %}
-            {% endfor %}
-    </ul>
-    </section>
+    {% assign version_date = version.date | date: '%Y-%m-%d' %}
+    {% if version_date < current_date and version.link %}
+        {% assign has_previous_versions = true %}
+        {% break %}
     {% endif %}
+{% endfor %}
+
+{% if has_previous_versions %}
+<section class="terms-history">
+        <!-- <h2>이전 버전</h2> -->
+        <ul class="no-marker">
+                {% for version in history %}
+                    {% assign version_date = version.date | date: '%Y-%m-%d' %}
+                    {% assign next_index = forloop.index0 | plus: 1 %}
+                    {% assign next_version = history[next_index] %}
+                    {% if version_date < current_date and version.link and next_version %}
+                        {% assign end_timestamp = next_version.date | date: '%s' | minus: 86400 %}
+                        {% assign end_date = end_timestamp | date: '%Y-%m-%d' %}
+        <li>
+                변경 전 {{ terms_title }} <a href="{{ version.link | relative_url }}">({{ version_date }}~{{ end_date }})</a>
+        </li>
+                    {% endif %}
+                {% endfor %}
+        </ul>
+</section>
+{% endif %}
