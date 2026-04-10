@@ -1,6 +1,8 @@
 ---
 layout: page
 title: 올레패스 서비스 이용약관 (2023-06-21 시행)
+terms_title: 올레패스 서비스 이용약관
+effective_date: 2023-06-21
 ---
 
 # 올레패스 서비스 이용약관
@@ -148,3 +150,5 @@ title: 올레패스 서비스 이용약관 (2023-06-21 시행)
 ## [부칙]
 
 이 약관의 최초 시행일자는 2023년 06월 21일입니다.
+
+{% include terms_of_service_history_links.html %}

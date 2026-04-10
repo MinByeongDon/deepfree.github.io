@@ -1,5 +1,6 @@
-- date: "2023-06-21"
-  current: true
+- date: "2022-03-21"
+  link: "/ollepass/terms-of-service/2022-03-21.html"
 
-- date: "2024-01-01"
-  link: "/ollepass/terms-of-service/2024-01-01.html"
+- date: "2023-06-21"
+  link: "/ollepass/terms-of-service/"
+  current: true
