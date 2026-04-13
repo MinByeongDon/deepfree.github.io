@@ -5,6 +5,8 @@ terms_title: 올레패스 서비스 이용약관
 effective_date: 2023-06-21
 ---
 
+{% include terms_of_service_header.html %}
+
 # 올레패스 서비스 이용약관
 
 ## 제 1 조 [목 적]

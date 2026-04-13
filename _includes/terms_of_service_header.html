@@ -1,0 +1,58 @@
+<!-- BEGIN: 약관 헤더 - 시행일자 및 약관 버전 네비게이션 표시 영역 -->
+{% assign terms_title = page.terms_title | default: page.title %}
+{% assign page_date = page.effective_date | date: '%Y-%m-%d' %}
+{% assign history = site.data.terms_of_service_history | sort: 'date' %}
+{% assign is_current = false %}
+{% assign prev_version = nil %}
+{% assign next_version = nil %}
+{% assign current_link = nil %}
+
+<!-- 약관 이력에서 현재 페이지의 버전 상태(최신 여부) 및 현재 시행 버전 링크 탐색 -->
+{% for version in history %}
+{% assign vd = version.date | date: '%Y-%m-%d' %}
+{% if vd == page_date and version.current == true %}
+{% assign is_current = true %}
+{% endif %}
+{% if version.current == true %}
+{% assign current_link = version.link %}
+{% endif %}
+{% endfor %}
+
+<!-- 이전 버전(prev_version)과 다음 버전(next_version) 탐색: 시행 종료일 계산에 사용 -->
+{% assign found = false %}
+{% for version in history %}
+{% assign vd = version.date | date: '%Y-%m-%d' %}
+{% if found == true and next_version == nil %}
+{% assign next_version = version %}
+{% endif %}
+{% if vd == page_date %}
+{% assign found = true %}
+{% endif %}
+{% if vd < page_date %} {% assign prev_version=version %} {% endif %} {% endfor %} <div class="terms-header">
+  <!-- 시행일자 표시: 최신 약관이면 시작일만, 아니면 시작일~종료일 범위 표시 -->
+  {% if is_current %}
+  <div>약관 시행일자: {{ page_date }}</div>
+  {% else %}
+  {% if next_version %}
+  {% assign end_ts = next_version.date | date: '%s' | minus: 86400 %}
+  {% assign end_date = end_ts | date: '%Y-%m-%d' %}
+  <div>약관 시행일자: {{ page_date }} ~ {{ end_date }}</div>
+  {% else %}
+  <div>약관 시행일자: {{ page_date }}</div>
+  {% endif %}
+  {% endif %}
+
+  <!-- 이전 약관 링크: 이전 버전이 존재하는 경우에만 표시 -->
+  {% if prev_version %}
+  {% assign prev_date = prev_version.date | date: '%Y-%m-%d' %}
+  {% assign prev_end_ts = page_date | date: '%s' | minus: 86400 %}
+  {% assign prev_end_date = prev_end_ts | date: '%Y-%m-%d' %}
+  <div>이전 {{ terms_title }} <a href="{{ prev_version.link | relative_url }}">({{ prev_date }} ~ {{ prev_end_date }}) &gt;</a></div>
+  {% endif %}
+
+  <!-- 현재 시행중인 약관 링크: 최신 약관이 아닌 경우에만 표시 -->
+  {% unless is_current %}
+  <div><a href="{{ current_link | relative_url }}">현재 시행 중인 최신약관 보러가기 &gt;</a></div>
+  {% endunless %}
+  </div>
+  <!-- END: 약관 헤더 -->
